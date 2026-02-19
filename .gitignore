@@ -1,2 +1,4 @@
 config.txt
 stata.lic
+data/
+*.log
