@@ -1,10 +1,8 @@
-# A Stata + R Docker Project
+# A Stata + Wolfram Engine Docker Project
 
-We simply demonstrate how you can combine Stata with R into a single Docker image.
+We demonstrate how you can combine Stata with Wolfram Engine into a single Docker image.
 
 Note that this could also include installing Pandoc or LaTeX, if needed, for Stata.
-
-Alternatively, one could use a JupyterLab setup, install the `stata_kernel`, and then copy in the Stata binaries.
 
 ## Setting up
 
@@ -33,8 +31,7 @@ where
 ARG SRCVERSION=17
 ARG SRCTAG=2022-01-17
 ARG SRCHUBID=dataeditors
-ARG RVERSION=4.1.0
-ARG RTYPE=verse
+ARG WOLFRAMVERSION=latest
 ```
 
 where 
@@ -42,7 +39,7 @@ where
 - `SRCVERSION` is the Stata version you want to use 
 - `SRCTAG` is the tag of the Stata version you want to use as an input
 - `SRCHUBID` is where the Stata image comes from - should probably not be modified, but you could use your own.
-- `RVERSION` and `RTYPE` are used to pin the `rocker/RTYPE:RVERSION` versioned image. Adjust as necessary
+- `WOLFRAMVERSION` is used to pin the `wolframresearch/wolframengine:WOLFRAMVERSION` versioned image. Adjust as necessary (e.g., "latest", "14.3")
 
 - Finally, edit the [`setup.do`](setup.do) file, which will install any Stata packages into the image.
 
@@ -54,6 +51,18 @@ Use `build.sh (NAME OF STATA LICENSE FILE)`, e.g.
 ./build.sh 
 ```
 
+## Activating Wolfram Engine
+
+On first use, you need to activate Wolfram Engine with your Wolfram ID credentials. Use the activation script:
+
+```{bash}
+./activate_wolfram.sh
+```
+
+You will be prompted to enter your Wolfram ID and password. The activation will be saved to `$HOME/.WolframEngine/Licensing` on your host machine and will be automatically mounted in future runs.
+
+**Note:** You need a (free) Wolfram Engine developer license. Sign up at https://www.wolfram.com/developer-license
+
 ## Running
 
 You also need the Stata license for running it all. For convenience, use the `run.sh` script:
@@ -62,3 +71,7 @@ You also need the Stata license for running it all. For convenience, use the `ru
 ./run.sh 
 ```
 
+The run script automatically:
+- Mounts your Stata license file
+- Mounts your Wolfram Engine licensing directory (from `$HOME/.WolframEngine/Licensing`)
+- Maps the code and data directories

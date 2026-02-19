@@ -42,11 +42,16 @@ basefile=$(basename $file)
 codedir=$(dirname $file)
 logfile=${file%*.do}.log
 
+# Prepare Wolfram Engine licensing directory if it doesn't exist
+mkdir -p $HOME/.WolframEngine/Licensing
+
 # run the docker and the Stata file
 # note that the working directory will be set to '/code' by default
+# Map both Stata license and Wolfram Engine licensing directory
 
 time docker run $DOCKEROPTS \
   -v ${STATALIC}:/usr/local/stata/stata.lic \
+  -v $HOME/.WolframEngine/Licensing:/home/wolframengine/.WolframEngine/Licensing \
   -v $(pwd)/${codedir}:/code \
   -v $(pwd)/data:/data \
   $DOCKERIMG:$TAG "$@"
