@@ -29,6 +29,8 @@ fi
 
 # Prepare Wolfram Engine licensing directory if it doesn't exist
 mkdir -p $HOME/.WolframEngine/Licensing
+chmod a+rwX $HOME/.WolframEngine/Licensing
+
 
 echo "Starting Docker container for Wolfram Engine activation..."
 echo "You will be prompted to enter your Wolfram ID and password."
